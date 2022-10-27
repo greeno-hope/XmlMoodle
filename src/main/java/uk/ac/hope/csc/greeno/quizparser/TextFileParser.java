@@ -57,14 +57,17 @@ public class TextFileParser {
 
         String currentFolder = System.getProperty("user.dir");
 
-        String testFile = "./test/test_in.txt";
+        String inFile = "./test/test_in.txt";
+        String outFile = null;
         String category = "JAVA-1";
 
-        TextFileParser parser = new TextFileParser(testFile, category);
+        TextFileParser parser = new TextFileParser(inFile, category);
         try {
+            // Parse the input file
             parser.parseFile();
-            // Print the XML
-            prettyPrint(parser.getDoc());
+            // Write the output file
+            parser.writeXML(outFile);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,7 +103,16 @@ public class TextFileParser {
             e.printStackTrace();
         }
         // create a new quiz
-        quiz = new MoodleQuiz(doc);
+        quiz = new MoodleQuiz(doc, category);
+    }
+
+    public void writeXML(String outFile) {
+
+        //
+        String xml = quiz.toString();
+
+        // TODO - Output to console for dev test ONLY
+        prettyPrint(doc);
     }
 
     /**
@@ -110,15 +122,13 @@ public class TextFileParser {
      */
     public void parseFile() throws Exception {
 
-        // Create the root document (with my category)
-        quiz.addCategory(category);
-
         linesIterator = lines.listIterator();
         while(linesIterator.hasNext()) {
             readLine = linesIterator.next();
-            if(isStartOfQuestion(readLine)) {
+            if (isStartOfQuestion(readLine)) {
                 parseQuestion();
                 Question question = buildQuestion();
+                quiz.addQuestion(question);
             }
         }
     }
@@ -197,20 +207,8 @@ public class TextFileParser {
      * @return
      */
     private Question.Q_TYPE getQuestionType() {
-
-        Question.Q_TYPE ret =  Question.Q_TYPE.Q_TYPE_UNDETERMINED;
-
-        String[] keyToken = keyLine.split(":");
-        if(keyToken[0].equals("Key")) {
-            if( keyToken[1].length() == 1 ) {
-                ret = Question.Q_TYPE.Q_TYPE_SINGLE_ANSWER;
-            } else if (keyToken[1].length() >1 ) {
-                ret = Question.Q_TYPE.Q_TYPE_MULTI_ANSWER;
-            } else {
-                // Do nothing yet!
-            }
-        }
-        return ret;
+        // TODO - this is for testing only (implement properly)
+        return Question.Q_TYPE.Q_TYPE_MULTI_CHOICE;
     }
 
     /**
@@ -219,12 +217,16 @@ public class TextFileParser {
      * @param xml
      * @throws Exception
      */
-    public static final void prettyPrint(Document xml) throws Exception {
-        Transformer tf = TransformerFactory.newInstance().newTransformer();
-        tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        tf.setOutputProperty(OutputKeys.INDENT, "yes");
-        Writer out = new StringWriter();
-        tf.transform(new DOMSource(xml), new StreamResult(out));
-        System.out.println(out.toString());
+    private void prettyPrint(Document xml) {
+        try {
+            Transformer tf = TransformerFactory.newInstance().newTransformer();
+            tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            tf.setOutputProperty(OutputKeys.INDENT, "yes");
+            Writer out = new StringWriter();
+            tf.transform(new DOMSource(xml), new StreamResult(out));
+            System.out.println(out.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -7,21 +7,24 @@ public abstract class Question implements QuizElement {
 
     public static enum Q_TYPE {
         Q_TYPE_UNDETERMINED,
-        Q_TYPE_SINGLE_ANSWER,
-        Q_TYPE_MULTI_ANSWER,
+        Q_TYPE_MULTI_CHOICE,
         Q_TYPE_TRUE_FALSE,
         Q_TYPE_SHORT_ANSWER
     };
 
     protected Document doc;
+
+    protected String questionName;
     protected String questionText;
 
     protected Q_TYPE type;
 
-    public Question(Document doc, Q_TYPE type, String questionText) {
-        this.type = type;
-        this.questionText = questionText;
+    public Question(Document doc, Q_TYPE type, String questionLine) {
+        String[] questionLineTokens = questionLine.split("[.]", 2);
         this.doc = doc;
+        this.type = type;
+        this.questionName = questionLineTokens[0];
+        this.questionText = questionLineTokens[1].trim();
     }
 
     public String getQuestionText() {

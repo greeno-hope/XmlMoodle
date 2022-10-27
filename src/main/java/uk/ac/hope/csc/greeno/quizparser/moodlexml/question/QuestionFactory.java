@@ -2,8 +2,13 @@ package uk.ac.hope.csc.greeno.quizparser.moodlexml.question;
 
 import org.w3c.dom.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ *
+ */
 public class QuestionFactory {
 
     public static QuestionFactory instance;
@@ -13,12 +18,17 @@ public class QuestionFactory {
     // the output XML
     protected Document doc;
 
-    // private constructor
+    /**
+     * private constructor
+     * @param doc
+     */
     private QuestionFactory(Document doc) {
         this.doc = doc;
     }
 
-    // The static accessor for the question factory
+    /**
+     * A static instance accessor
+     */
     public static QuestionFactory getInstance(Document doc) {
         if(instance == null) {
             instance = new QuestionFactory(doc);
@@ -26,9 +36,15 @@ public class QuestionFactory {
         return instance;
     }
 
-    // Document doc, Q_TYPE type, String questionText, List<String> potentialAnswers, Character answer
-
-    public Question createQuestion(Question.Q_TYPE type, List<String> questionLines, List<String> answers, String keyLine) {
+    /**
+     *
+     * @param type
+     * @param questionLines
+     * @param choices
+     * @param keyLine
+     * @return
+     */
+    public Question createQuestion(Question.Q_TYPE type, List<String> questionLines, List<String> choices, String keyLine) {
 
         Question ret = null;
 
@@ -39,13 +55,23 @@ public class QuestionFactory {
             sb.append(s);
         }
 
-        // Tokenize the Key line
-        String[] keyTokens = keyLine.split(":");
-
-        if(type == Question.Q_TYPE.Q_TYPE_SINGLE_ANSWER) {
-            SingleAnswerQuestion saq = new SingleAnswerQuestion(doc, type, sb.toString(), answers, keyTokens[1].charAt(0));
-        } else if (type == Question.Q_TYPE.Q_TYPE_MULTI_ANSWER) {
-
+        switch(type) {
+            case Q_TYPE_MULTI_CHOICE:
+                // The Key (answer) line has the structure 'Key:ab' etc.
+                String[] keys = keyLine.split(":");
+                List<Character> answers = new ArrayList<>();
+                for(int i=0; i<keys[1].length(); i++) {
+                    if( keys[1].charAt(i) == ' ') {
+                        // TODO will probably have to make safe
+                        break;
+                    } else {
+                        answers.add(keys[1].charAt(i));
+                    }
+                }
+                ret = new MultiChoiceQuestion(doc, type, sb.toString(), choices, answers);
+                break;
+            default:
+                break;
         }
 
         return ret;
