@@ -16,8 +16,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 
 import uk.ac.hope.csc.greeno.quizparser.moodlexml.MoodleQuiz;
-import uk.ac.hope.csc.greeno.quizparser.moodlexml.Question;
-import uk.ac.hope.csc.greeno.quizparser.moodlexml.QuestionFactory;
+import uk.ac.hope.csc.greeno.quizparser.moodlexml.question.Question;
+import uk.ac.hope.csc.greeno.quizparser.moodlexml.question.QuestionFactory;
 
 /**
  *
@@ -37,13 +37,14 @@ public class TextFileParser {
     protected String readLine;
     // List<String> to hold individual lines of a
     // (potentially) multiline question
-    List<String> questionLines;
+    protected List<String> questionLines;
     // List<String> to hold the array of question answers
-    List<String> answers;
+    protected List<String> answers;
     // String to hold the answer (Key) line.
-    String keyLine;
-
+    protected String keyLine;
+    // The (sort of) global org.w3c.dom.Document object
     protected Document doc;
+    // The MoodleQuiz object
     protected MoodleQuiz quiz;
 
     /**
@@ -202,7 +203,7 @@ public class TextFileParser {
         String[] keyToken = keyLine.split(":");
         if(keyToken[0].equals("Key")) {
             if( keyToken[1].length() == 1 ) {
-                ret = Question.Q_TYPE.Q_TYPE_MULTI_CHOICE;
+                ret = Question.Q_TYPE.Q_TYPE_SINGLE_ANSWER;
             } else if (keyToken[1].length() >1 ) {
                 ret = Question.Q_TYPE.Q_TYPE_MULTI_ANSWER;
             } else {

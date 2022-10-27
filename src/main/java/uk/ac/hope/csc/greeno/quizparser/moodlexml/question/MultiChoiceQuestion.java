@@ -1,4 +1,4 @@
-package uk.ac.hope.csc.greeno.quizparser.moodlexml;
+package uk.ac.hope.csc.greeno.quizparser.moodlexml.question;
 
 import org.w3c.dom.Document;
 

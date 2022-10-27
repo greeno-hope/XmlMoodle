@@ -2,6 +2,7 @@ package uk.ac.hope.csc.greeno.quizparser.moodlexml;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import uk.ac.hope.csc.greeno.quizparser.moodlexml.category.Category;
 
 public class MoodleQuiz {
 

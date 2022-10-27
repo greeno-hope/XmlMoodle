@@ -1,4 +1,4 @@
-package uk.ac.hope.csc.greeno.quizparser.moodlexml;
+package uk.ac.hope.csc.greeno.quizparser.moodlexml.question;
 
 import org.w3c.dom.Document;
 
@@ -32,16 +32,18 @@ public class QuestionFactory {
 
         Question ret = null;
 
+        // Use a StringBuilder to concatenate the lines of the question into a single line
+        // TODO will need to add additional whitespace and/or LFCR here
         StringBuilder sb = new StringBuilder();
         for(String s : questionLines) {
             sb.append(s);
         }
 
+        // Tokenize the Key line
+        String[] keyTokens = keyLine.split(":");
+
         if(type == Question.Q_TYPE.Q_TYPE_SINGLE_ANSWER) {
-
-            // TODO Parse the answer
-
-            SingleAnswerQuestion saq = new SingleAnswerQuestion(doc, type, sb.toString(), answers, 'C');
+            SingleAnswerQuestion saq = new SingleAnswerQuestion(doc, type, sb.toString(), answers, keyTokens[1].charAt(0));
         } else if (type == Question.Q_TYPE.Q_TYPE_MULTI_ANSWER) {
 
         }

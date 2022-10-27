@@ -1,7 +1,8 @@
-package uk.ac.hope.csc.greeno.quizparser.moodlexml;
+package uk.ac.hope.csc.greeno.quizparser.moodlexml.category;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import uk.ac.hope.csc.greeno.quizparser.moodlexml.QuizElement;
 
 /* Example output from the asElement() if returned as XML
 
