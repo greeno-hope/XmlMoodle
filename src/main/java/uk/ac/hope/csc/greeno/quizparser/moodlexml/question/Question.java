@@ -58,9 +58,12 @@ public abstract class Question implements QuizElement {
         // Create the <questiontext> tag element
         Element questionTextElement = doc.createElement("questiontext");
         questionTextElement.setAttribute( "format", "html");
+        // Still need a <text> node
+        Element textTag = doc.createElement("text");
+        questionTextElement.appendChild(textTag);
         // Create the CDATA element
         Node cdataElement = doc.createCDATASection(cdata.replace("${QT}", questionText));
-        questionTextElement.appendChild(cdataElement);
+        textTag.appendChild(cdataElement);
         return questionTextElement;
     }
 

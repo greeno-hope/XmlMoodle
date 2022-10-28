@@ -6,6 +6,13 @@ import org.w3c.dom.Element;
 import uk.ac.hope.csc.greeno.quizparser.moodlexml.category.Category;
 import uk.ac.hope.csc.greeno.quizparser.moodlexml.question.Question;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,13 +59,22 @@ public class MoodleQuiz {
      */
     @Override
     public String toString() {
-        String ret = null;
 
         for(Question question : questions) {
             quizRoot.appendChild(question.asDocumentElement());
         }
 
-        return ret;
+        Writer out = new StringWriter();
+
+        try {
+            Transformer tf = TransformerFactory.newInstance().newTransformer();
+            tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            tf.setOutputProperty(OutputKeys.INDENT, "yes");
+            tf.transform(new DOMSource(doc), new StreamResult(out));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return out.toString();
     }
 
 }

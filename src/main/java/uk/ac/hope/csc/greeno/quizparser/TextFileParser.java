@@ -112,7 +112,7 @@ public class TextFileParser {
         String xml = quiz.toString();
 
         // TODO - Output to console for dev test ONLY
-        prettyPrint(doc);
+        System.out.println(xml);
     }
 
     /**
@@ -209,24 +209,5 @@ public class TextFileParser {
     private Question.Q_TYPE getQuestionType() {
         // TODO - this is for testing only (implement properly)
         return Question.Q_TYPE.Q_TYPE_MULTI_CHOICE;
-    }
-
-    /**
-     * Mostly for testing purposes. Outputs the current Document as nicely formatted
-     * XML
-     * @param xml
-     * @throws Exception
-     */
-    private void prettyPrint(Document xml) {
-        try {
-            Transformer tf = TransformerFactory.newInstance().newTransformer();
-            tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            tf.setOutputProperty(OutputKeys.INDENT, "yes");
-            Writer out = new StringWriter();
-            tf.transform(new DOMSource(xml), new StreamResult(out));
-            System.out.println(out.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
