@@ -5,6 +5,8 @@ import uk.ac.hope.csc.greeno.quizparser.moodlexml.QuizElement;
 
 public abstract class Question implements QuizElement {
 
+    public static final String cdata = "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">Which number?</p>]]>";
+
     public static enum Q_TYPE {
         Q_TYPE_UNDETERMINED,
         Q_TYPE_MULTI_CHOICE,
@@ -37,6 +39,52 @@ public abstract class Question implements QuizElement {
 
     public Q_TYPE getType() {
         return type;
+    }
+
+    protected Element getQuestionNameElement() {
+        // Create the <name> tag element
+        Element questionNameElement = doc.createElement("name");
+        // Create the <text> tag element (sigh!)
+        Element txt = doc.createElement("text");
+        // Add the text tag data
+        txt.appendChild(doc.createTextNode(questionName));
+        // Append to the question element
+        questionNameElement.appendChild(txt);
+        // Return the element
+        return questionNameElement;
+    }
+
+    protected Element getQuestionTextFormatElement() {
+        // Create the <questiontext> tag element
+        Element questionTextElement = doc.createElement("questiontext");
+        questionTextElement.setAttribute( "format", "html");
+        // Create the <text> tag element (sigh!)
+        Element txt = doc.createElement("text");
+        // Add the text tag data TODO - fix the CDATA here ...
+        txt.appendChild(doc.createTextNode(cdata));
+        // Append to the question element
+        questionTextElement.appendChild(txt);
+        return questionTextElement;
+    }
+
+    protected Element getGeneralFeedbackElement() {
+        // Create the <generalfeedback> tag element
+        Element generalFeedbackElement = doc.createElement("generalfeedback");
+        generalFeedbackElement.setAttribute( "format", "html");
+        // Create the <text> tag element (sigh!)
+        Element txt = doc.createElement("text");
+        generalFeedbackElement.appendChild(txt);
+        return generalFeedbackElement;
+    }
+
+    protected Element getFlatTagElement(String tag, String data) {
+        Element flatNodeElement = doc.createElement(tag);
+        flatNodeElement.appendChild(doc.createTextNode(data));
+        return flatNodeElement;
+    }
+
+    protected Element getEmptyTagElement(String tag) {
+        return doc.createElement(tag);
     }
 
 }

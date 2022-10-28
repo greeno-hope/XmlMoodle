@@ -28,38 +28,18 @@ public class MultiChoiceQuestion extends Question {
         question.setAttribute("type", "multichoice");
         // Append the name element
         question.appendChild(getQuestionNameElement());
-        // Appent the text format element
-        question.appendChild(getQuestionTextElement());
-
+        // Append the text format element
+        question.appendChild(getQuestionTextFormatElement());
+        // Append the general feedback element
+        question.appendChild(getGeneralFeedbackElement());
+        // Append the default grade element
+        // TODO - check this for questions with mre than one correct answer
+        question.appendChild(getFlatTagElement("defaultgrade", Double.valueOf(1.0).toString()));
+        // Append <penalty> element
+        question.appendChild(getFlatTagElement("penalty", Double.valueOf(0.333333).toString()));
+        // Append <hidden> tag element
+        question.appendChild(getFlatTagElement("hidden", Integer.valueOf(0).toString()));
         return question;
     }
-
-    protected Element getQuestionNameElement() {
-        // Create the <name> tag element
-        Element questionNameElement = doc.createElement("name");
-        // Create the <text> tag element (sigh!)
-        Element txt = doc.createElement("text");
-        // Add the text tag data
-        txt.appendChild(doc.createTextNode(questionName));
-        // Append to the question element
-        questionNameElement.appendChild(txt);
-        // Return the element
-        return questionNameElement;
-    }
-
-    protected Element getQuestionTextElement() {
-        // Create the <questiontext> tag element
-        Element questionTextElement = doc.createElement("questiontext");
-        questionTextElement.setAttribute( "format", "html");
-        // Create the <text> tag element (sigh!)
-        Element txt = doc.createElement("text");
-        // Add the text tag data TODO - fix the CDATA here ...
-        txt.appendChild(doc.createTextNode("<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">Which number?</p>]]\>"));
-        // Append to the question element
-        questionTextElement.appendChild(txt);
-        return questionTextElement;
-    }
-
-
 
 }
