@@ -29,7 +29,7 @@ public class MultiChoiceQuestion extends Question {
         // Append the name element
         question.appendChild(getQuestionNameElement());
         // Append the text format element
-        question.appendChild(getQuestionTextFormatElement());
+        question.appendChild(getQuestionTextElement());
         // Append the general feedback element
         question.appendChild(getGeneralFeedbackElement());
         // Append the default grade element
@@ -39,6 +39,11 @@ public class MultiChoiceQuestion extends Question {
         question.appendChild(getFlatTagElement("penalty", Double.valueOf(0.333333).toString()));
         // Append <hidden> tag element
         question.appendChild(getFlatTagElement("hidden", Integer.valueOf(0).toString()));
+        // Append <idnumber>
+        question.appendChild(getEmptyTagElement("idnumber"));
+
+
+
         return question;
     }
 

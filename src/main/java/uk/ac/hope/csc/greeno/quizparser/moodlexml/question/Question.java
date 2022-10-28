@@ -5,7 +5,7 @@ import uk.ac.hope.csc.greeno.quizparser.moodlexml.QuizElement;
 
 public abstract class Question implements QuizElement {
 
-    public static final String cdata = "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">Which number?</p>]]>";
+    public static final String cdata = "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">${QT}</p>]]>";
 
     public static enum Q_TYPE {
         Q_TYPE_UNDETERMINED,
@@ -54,14 +54,14 @@ public abstract class Question implements QuizElement {
         return questionNameElement;
     }
 
-    protected Element getQuestionTextFormatElement() {
+    protected Element getQuestionTextElement() {
         // Create the <questiontext> tag element
         Element questionTextElement = doc.createElement("questiontext");
         questionTextElement.setAttribute( "format", "html");
         // Create the <text> tag element (sigh!)
         Element txt = doc.createElement("text");
         // Add the text tag data TODO - fix the CDATA here ...
-        txt.appendChild(doc.createTextNode(cdata));
+        txt.appendChild(doc.createTextNode(cdata.replace("${QT}", questionText)));
         // Append to the question element
         questionTextElement.appendChild(txt);
         return questionTextElement;
