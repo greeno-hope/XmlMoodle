@@ -53,7 +53,7 @@ public class QuestionFactory {
         StringBuilder sb = new StringBuilder();
         for(String s : questionLines) {
             sb.append(s);
-            sb.append('\n');
+            sb.append("<br/>");
         }
 
         switch(type) {
