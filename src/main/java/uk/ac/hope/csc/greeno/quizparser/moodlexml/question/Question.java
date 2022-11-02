@@ -3,6 +3,9 @@ package uk.ac.hope.csc.greeno.quizparser.moodlexml.question;
 import org.w3c.dom.*;
 import uk.ac.hope.csc.greeno.quizparser.moodlexml.QuizElement;
 
+/**
+ *
+ */
 public abstract class Question implements QuizElement {
 
     public static final String cdata = "<p dir=\"ltr\" style=\"text-align: left;\">${QT}</p>";
@@ -21,26 +24,48 @@ public abstract class Question implements QuizElement {
 
     protected Q_TYPE type;
 
-    public Question(Document doc, Q_TYPE type, String questionLine) {
+    /**
+     *
+     * @param doc
+     * @param type
+     * @param questionLine
+     */
+    public Question(Document doc, Q_TYPE type, String questionName, String questionLine) {
         String[] questionLineTokens = questionLine.split("[.]", 2);
         this.doc = doc;
         this.type = type;
-        this.questionName = questionLineTokens[0];
+        this.questionName = questionName;
         this.questionText = questionLineTokens[1].trim();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getQuestionText() {
         return questionText;
     }
 
+    /**
+     *
+     * @param questionText
+     */
     public void setQuestionText(String questionText) {
         this.questionText = questionText;
     }
 
+    /**
+     *
+     * @return
+     */
     public Q_TYPE getType() {
         return type;
     }
 
+    /**
+     *
+     * @return
+     */
     protected Element getQuestionNameElement() {
         // Create the <name> tag element
         Element questionNameElement = doc.createElement("name");
@@ -54,6 +79,10 @@ public abstract class Question implements QuizElement {
         return questionNameElement;
     }
 
+    /**
+     *
+     * @return
+     */
     protected Element getQuestionTextElement() {
         // Create the <questiontext> tag element
         Element questionTextElement = doc.createElement("questiontext");
@@ -67,6 +96,10 @@ public abstract class Question implements QuizElement {
         return questionTextElement;
     }
 
+    /**
+     *
+     * @return
+     */
     protected Element getGeneralFeedbackElement() {
         // Create the <generalfeedback> tag element
         Element generalFeedbackElement = doc.createElement("generalfeedback");
@@ -77,12 +110,23 @@ public abstract class Question implements QuizElement {
         return generalFeedbackElement;
     }
 
+    /**
+     *
+     * @param tag
+     * @param data
+     * @return
+     */
     protected Element getFlatTagElement(String tag, String data) {
         Element flatNodeElement = doc.createElement(tag);
         flatNodeElement.appendChild(doc.createTextNode(data));
         return flatNodeElement;
     }
 
+    /**
+     *
+     * @param tag
+     * @return
+     */
     protected Element getEmptyTagElement(String tag) {
         return doc.createElement(tag);
     }

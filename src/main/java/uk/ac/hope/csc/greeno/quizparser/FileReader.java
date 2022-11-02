@@ -11,12 +11,6 @@ public class FileReader {
     protected String file;
     protected List<String> fileLines;
 
-    public static void main(String[] args) {
-
-        FileReader reader = new FileReader("./textfile.txt");
-
-    }
-
     public FileReader(String file) {
         this.file = file;
     }

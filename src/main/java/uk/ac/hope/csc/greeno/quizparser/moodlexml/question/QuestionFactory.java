@@ -44,7 +44,7 @@ public class QuestionFactory {
      * @param keyLine
      * @return
      */
-    public Question createQuestion(Question.Q_TYPE type, List<String> questionLines, List<String> choices, String keyLine) {
+    public Question createQuestion(Question.Q_TYPE type, String questionName, List<String> questionLines, List<String> choices, String keyLine) {
 
         Question ret = null;
 
@@ -53,6 +53,7 @@ public class QuestionFactory {
         StringBuilder sb = new StringBuilder();
         for(String s : questionLines) {
             sb.append(s);
+            sb.append('\n');
         }
 
         switch(type) {
@@ -68,7 +69,7 @@ public class QuestionFactory {
                         answers.add(keys[1].charAt(i));
                     }
                 }
-                ret = new MultiChoiceQuestion(doc, type, sb.toString(), choices, answers);
+                ret = new MultiChoiceQuestion(doc, type, questionName, sb.toString(), choices, answers);
                 break;
             default:
                 break;

@@ -19,15 +19,20 @@ import uk.ac.hope.csc.greeno.quizparser.moodlexml.MoodleQuiz;
 import uk.ac.hope.csc.greeno.quizparser.moodlexml.question.Question;
 import uk.ac.hope.csc.greeno.quizparser.moodlexml.question.QuestionFactory;
 
+import static java.lang.System.exit;
+
 /**
  *
  */
 public class TextFileParser {
 
     // String to hold the input (.txt) file path
-    protected String path;
+    protected String inPath;
+    protected String outPath;
     // String to hold the quiz category
     protected String category;
+    // String to hold the question name for this block of questions)
+    protected String questionName;
     // List to hold the individual lines of the input file
     protected List<String> lines;
     // We'll use a ListIterator interface so that we can
@@ -55,18 +60,22 @@ public class TextFileParser {
      */
     public static void main(String[] args) {
 
-        String currentFolder = System.getProperty("user.dir");
+//        if(args.length != 2) {
+//            System.out.println("Utility takes 2 arguments and infile name (.txt) and an outfile name (.xml)");
+//            exit(-1);
+//        }
 
-        String inFile = "./test/test_in.txt";
-        String outFile = null;
-        String category = "JAVA-1";
+        String inFile = "./input/chapter8.txt";
+        String outFile = "./output/lecture_08.xml";
+        String category = "JAVA_DS_SE_BLOCK1";
+        String questionName = "08_2DARRAYS";
 
-        TextFileParser parser = new TextFileParser(inFile, category);
+        TextFileParser parser = new TextFileParser(inFile, outFile, questionName, category);
         try {
             // Parse the input file
             parser.parseFile();
             // Write the output file
-            parser.writeXML(outFile);
+            parser.writeXML();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,17 +91,22 @@ public class TextFileParser {
     }
 
     /**
-     * Constructor
-     * @param path - input text file
-     * @param category - a category field for the generated XML
+     *
+     * @param inPath
+     * @param outPath
+     * @param category
      */
-    public TextFileParser(String path, String category) {
+    public TextFileParser(String inPath, String outPath, String questionName, String category) {
         // Category
         this.category = category;
-        // Set the file path
-        this.path = path;
+        // Q Names
+        this.questionName = questionName;
+
+        // Set the file paths
+        this.inPath = inPath;
+        this.outPath = outPath;
         // Read the input file
-        lines = new FileReader(path).readFile();
+        lines = new FileReader(inPath).readFile();
 
         try {
             // Create the DOM root for the output XML
@@ -106,10 +120,13 @@ public class TextFileParser {
         quiz = new MoodleQuiz(doc, category);
     }
 
-    public void writeXML(String outFile) {
+    public void writeXML() {
 
-        //
+        // Parse to XML
         String xml = quiz.toString();
+
+        // Write to file
+        boolean ok = new FileWriter(outPath).writeFile(xml);
 
         // TODO - Output to console for dev test ONLY
         System.out.println(xml);
@@ -199,7 +216,7 @@ public class TextFileParser {
      * @return
      */
     private Question buildQuestion() {
-        return QuestionFactory.getInstance(doc).createQuestion(getQuestionType(), questionLines, answers, keyLine);
+        return QuestionFactory.getInstance(doc).createQuestion(getQuestionType(), questionName, questionLines, answers, keyLine);
     }
 
     /**

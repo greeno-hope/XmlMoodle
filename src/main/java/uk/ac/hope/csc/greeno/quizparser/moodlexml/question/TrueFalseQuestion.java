@@ -8,8 +8,8 @@ public class TrueFalseQuestion extends Question {
 
     private boolean answer;
 
-    public TrueFalseQuestion(Document doc, Q_TYPE type, String questionText, boolean answer) {
-        super(doc, type, questionText);
+    public TrueFalseQuestion(Document doc, Q_TYPE type, String questionName, String questionText, boolean answer) {
+        super(doc, type, questionName, questionText);
         this.answer = answer;
     }
 

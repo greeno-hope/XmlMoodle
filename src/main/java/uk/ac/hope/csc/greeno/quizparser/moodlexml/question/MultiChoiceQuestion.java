@@ -31,9 +31,9 @@ public class MultiChoiceQuestion extends Question {
      * @param potentialAnswers
      * @param answers
      */
-    public MultiChoiceQuestion(Document doc, Q_TYPE type,String questionText, List<String> potentialAnswers, List<Character> answers) {
+    public MultiChoiceQuestion(Document doc, Q_TYPE type, String questionName, String questionText, List<String> potentialAnswers, List<Character> answers) {
 
-        super(doc, type, questionText);
+        super(doc, type, questionName, questionText);
 
         totalCount = potentialAnswers.size();
         if(answers.size() == 1) {
@@ -45,12 +45,48 @@ public class MultiChoiceQuestion extends Question {
         }
 
         // Set the penalties TODO - poss single answer questions do not incur a penalty?
-        correctFraction = 100.0 / correctCount;
-        if(totalCount != correctCount) {
-            // This is because a few questions have all correct answers - the students have
-            // to be confident eenough to tick them all!! (and we want to avoid a divide-by-zero)
-            incorrectFraction = -100 / (totalCount - correctCount);
+        switch(correctCount) {
+            case 1:
+                correctFraction = 100.0;
+                break;
+            case 2:
+                correctFraction = 50;
+                break;
+            case 3:
+                correctFraction = 33.33333;
+                break;
+            case 4:
+                correctFraction = 25;
+                break;
+            case 5:
+                correctFraction = 20;
+                break;
+            default:
+                // NOP
         }
+
+        int incorrectCount = totalCount - correctCount;
+        // Set the penalties TODO - currently single answer questions do not incur a penalty?
+        switch(incorrectCount) {
+            case 1:
+                incorrectFraction = 0;
+                break;
+            case 2:
+                incorrectFraction = -50;
+                break;
+            case 3:
+                incorrectFraction = -33.33333;
+                break;
+            case 4:
+                incorrectFraction = -25;
+                break;
+            case 5:
+                incorrectFraction = -20;
+                break;
+            default:
+                // NOP
+        }
+
 
         // Create a list for answers
         answerList = new ArrayList<>();
@@ -59,12 +95,16 @@ public class MultiChoiceQuestion extends Question {
         for (String s : potentialAnswers) {
             // The answer still has the original letter up front a. b. etc
             String[] splitAnswer = s.split("[.]", 2);
-            if(answers.contains(splitAnswer[0].charAt(0))) {
-                // This is a correct answer
-                answerList.add(new MultiChoiceAnswer(doc, splitAnswer[1].trim(), correctFraction));
-            } else {
-                // this is an incorrect answer
-                answerList.add(new MultiChoiceAnswer(doc, splitAnswer[1].trim(), incorrectFraction));
+            try {
+                if(answers.contains(splitAnswer[0].charAt(0))) {
+                    // This is a correct answer
+                    answerList.add(new MultiChoiceAnswer(doc, splitAnswer[1].trim(), correctFraction));
+                } else {
+                    // this is an incorrect answer
+                    answerList.add(new MultiChoiceAnswer(doc, splitAnswer[1].trim(), incorrectFraction));
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
             }
         }
     }
