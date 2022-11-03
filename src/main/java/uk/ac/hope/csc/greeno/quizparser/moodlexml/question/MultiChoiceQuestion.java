@@ -143,6 +143,9 @@ public class MultiChoiceQuestion extends Question {
             question.appendChild(getFlatTagElement("single", "false"));
         }
 
+        // Always shuffle answers
+        question.appendChild(getFlatTagElement("shuffleanswers", "true"));
+
         // Append the answer tags
         for (MultiChoiceAnswer m : answerList) {
             question.appendChild(m.asDocumentElement());

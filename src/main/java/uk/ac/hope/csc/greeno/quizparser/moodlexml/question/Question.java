@@ -2,6 +2,7 @@ package uk.ac.hope.csc.greeno.quizparser.moodlexml.question;
 
 import org.w3c.dom.*;
 import uk.ac.hope.csc.greeno.quizparser.moodlexml.QuizElement;
+import uk.ac.hope.csc.greeno.quizparser.moodlexml.util.Util;
 
 /**
  *
@@ -34,7 +35,10 @@ public abstract class Question implements QuizElement {
         String[] questionLineTokens = questionLine.split("[.]", 2);
         this.doc = doc;
         this.type = type;
-        this.questionName = questionName;
+        // Want a unique ID - so add a random string here so that I can find stuff
+        // when I need it
+        this.questionName = questionName + "_" + Util.getRandString(3);
+
         this.questionText = questionLineTokens[1].trim();
     }
 

@@ -65,7 +65,7 @@ public class TextFileParser {
 //            exit(-1);
 //        }
 
-        String inFile = "./input/chapter8.txt";
+        String inFile = "./input/8.txt";
         String outFile = "./output/lecture_08.xml";
         String category = "JAVA_DS_SE_BLOCK1";
         String questionName = "08_2DARRAYS";
