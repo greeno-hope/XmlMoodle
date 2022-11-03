@@ -48,6 +48,8 @@ public class MultiChoiceQuestion extends Question {
         switch(correctCount) {
             case 1:
                 correctFraction = 100.0;
+                // No penalty for an incorrect answer in a single answer question
+                incorrectFraction = 0;
                 break;
             case 2:
                 correctFraction = 50;
@@ -65,26 +67,28 @@ public class MultiChoiceQuestion extends Question {
                 // NOP
         }
 
-        int incorrectCount = totalCount - correctCount;
-        // Set the penalties TODO - currently single answer questions do not incur a penalty?
-        switch(incorrectCount) {
-            case 1:
-                incorrectFraction = 0;
-                break;
-            case 2:
-                incorrectFraction = -50;
-                break;
-            case 3:
-                incorrectFraction = -33.33333;
-                break;
-            case 4:
-                incorrectFraction = -25;
-                break;
-            case 5:
-                incorrectFraction = -20;
-                break;
-            default:
-                // NOP
+        if(!singleAnswer) {
+            int incorrectCount = totalCount - correctCount;
+            // Set the penalties TODO - currently single answer questions do not incur a penalty?
+            switch(incorrectCount) {
+                case 1:
+                    incorrectFraction = -100;
+                    break;
+                case 2:
+                    incorrectFraction = -50;
+                    break;
+                case 3:
+                    incorrectFraction = -33.33333;
+                    break;
+                case 4:
+                    incorrectFraction = -25;
+                    break;
+                case 5:
+                    incorrectFraction = -20;
+                    break;
+                default:
+                    // NOP
+            }
         }
 
 
